@@ -23,18 +23,31 @@ class Piece
   def jump(dir)
     @board.remove_at(slide_pos(dir))
     @row, @col = jump_pos(dir)
+    make_king
     nil
   end
 
   # forces a slide in the given direction
   def slide(dir)
     @row, @col = slide_pos(dir)
+    make_king
     nil
   end
 
   def disp_str
-    color == :white ? 'X' : 'O'
+    str = (@color == :white) ? 'x' : 'o'
+    str.upcase! if @king
+    str
   end
+
+  def make_king
+    if @row == 0 && @color == :white
+      @king = true
+    elsif @row == 7 && @color == :black
+      @king = true
+    end
+  end
+
 
   # array of directions the piece can move in
   def directions

@@ -62,10 +62,15 @@ class Board
   end
 
   def can_jump?(piece, dir)
+    return false if piece.nil?
+    return false if self.piece_at(piece.slide_pos(dir)).nil?
     return false unless VALID_POS.include?(piece.jump_pos(dir))
 
-    self.piece_at( piece.slide_pos(dir) ).color == other_turn &&
-    self.empty?( piece.jump_pos(dir) )
+    # might need to swap the order of these
+    # self.piece_at( piece.slide_pos(dir) ).color == other_turn &&
+    # self.empty?( piece.jump_pos(dir) )
+    return false unless empty?( piece.jump_pos(dir))
+    self.piece_at(piece.slide_pos(dir)).color != piece.color
   end
 
   def jumps?(piece)
@@ -85,7 +90,7 @@ class Board
   end
 
   def empty?(pos)
-    return true unless VALID_POS.include?(pos)
+    return false unless VALID_POS.include?(pos)
     !piece?(pos)
   end
 

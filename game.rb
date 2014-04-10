@@ -15,19 +15,20 @@ class Game
   attr_reader :board, :players
   def initialize
     @board = Board.new
-    @players = { white: Player.new('TEST'), black: Player.new }
+    @players = { white: TestPlayer.new('TEST'), black: TestPlayer.new }
   end
 
   def play
     # test_sequence
-    until board.over?
+    30.times do
       begin
         play_turn
       rescue => e
         puts "That is not a valid move: #{e.message}"
-        retry
       end
     end
+    debugger
+    play_turn
   end
 
   protected

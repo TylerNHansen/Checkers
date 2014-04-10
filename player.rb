@@ -1,5 +1,7 @@
 # encoding: UTF-8
 
+require 'debugger'
+
 # needs two methods:
 # 1. Show the player the board
 # 2. Get a move from the player
@@ -39,5 +41,20 @@ class Player
 
   def loc_to_ind(row, col)
     row * 9 + col
+  end
+end
+
+class TestPlayer < Player
+  @@moves = File.open('testmoves.txt').each_line.map(&:chomp)
+  def move
+    if @@moves.empty?
+      debugger
+      super
+    else
+      move_arr = @@moves.shift.split(',').map(&:to_i)
+      puts
+      puts "trying #{move_arr}"
+      [[move_arr[0], move_arr[1]], DIRECTIONS[move_arr[2]]]
+    end
   end
 end
