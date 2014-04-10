@@ -48,11 +48,10 @@ class Piece
     end
   end
 
-
   # array of directions the piece can move in
   def directions
     return UP_DIRS + DOWN_DIRS if king
-    self.color == :white ? UP_DIRS : DOWN_DIRS
+    color == :white ? UP_DIRS : DOWN_DIRS
   end
 
   def slide_pos(dir)

@@ -30,7 +30,8 @@ class Board
   end
 
   def over?
-    false # stubbed
+    return true if @white_pieces.empty? || @black_pieces.empty?
+    pieces.none? { |piece| jumps?(piece) || slides?(piece) }
   end
 
   def move(player_move)
@@ -58,23 +59,27 @@ class Board
 
   def can_slide?(piece, dir)
     # can slide if no piece in the way
-    self.empty?( piece.slide_pos(dir) )
+    self.empty?(piece.slide_pos(dir))
   end
 
   def can_jump?(piece, dir)
     return false if piece.nil?
-    return false if self.piece_at(piece.slide_pos(dir)).nil?
+    return false if piece_at(piece.slide_pos(dir)).nil?
     return false unless VALID_POS.include?(piece.jump_pos(dir))
 
     # might need to swap the order of these
     # self.piece_at( piece.slide_pos(dir) ).color == other_turn &&
     # self.empty?( piece.jump_pos(dir) )
-    return false unless empty?( piece.jump_pos(dir))
-    self.piece_at(piece.slide_pos(dir)).color != piece.color
+    return false unless empty?(piece.jump_pos(dir))
+    piece_at(piece.slide_pos(dir)).color != piece.color
   end
 
   def jumps?(piece)
     piece.directions.any? { |dir| can_jump?(piece, dir) }
+  end
+
+  def slides?(piece)
+    piece.directions.any? { |dir| can_slide?(piece, dir) }
   end
 
   # switches the turn unless the jumping piece can make more jumps
@@ -95,12 +100,12 @@ class Board
   end
 
   def piece_at(pos)
-    pieces.find { |piece| piece.row == pos[0] && piece.col == pos[1]}
+    pieces.find { |piece| piece.row == pos[0] && piece.col == pos[1] }
   end
 
   def remove_at(pos)
-    @white_pieces.delete_if { |p| p.row == pos[0] && p.col == pos[1]}
-    @black_pieces.delete_if { |p| p.row == pos[0] && p.col == pos[1]}
+    @white_pieces.delete_if { |p| p.row == pos[0] && p.col == pos[1] }
+    @black_pieces.delete_if { |p| p.row == pos[0] && p.col == pos[1] }
   end
 
   protected

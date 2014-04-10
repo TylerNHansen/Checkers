@@ -15,56 +15,27 @@ class Game
   attr_reader :board, :players
   def initialize
     @board = Board.new
-    @players = { white: TestPlayer.new('TEST'), black: TestPlayer.new }
+    @players = { white: TestPlayer.new('WHITE'), black: TestPlayer.new }
   end
 
   def play
     # test_sequence
-    30.times do
+    until board.over?
       begin
         play_turn
       rescue => e
         puts "That is not a valid move: #{e.message}"
       end
     end
-    debugger
-    play_turn
+    @players[:white].show_board(@board)
+    nil
   end
 
   protected
 
-  def test_sequence
-    debugger
-    players[:white].show_board(board)
-    board.remove_at([5,2])
-    board.remove_at([0,1])
-    board.remove_at([1,4])
-
-    puts 'REMOVING A WHITE AND BLACK PIECE'
-    players[:white].show_board(board)
-
-    puts 'MAKING SOME MOVES, SLIDES AND SINGLE JUMPS'
-    board.move([[5, 0], [-1, 1]])
-    players[:white].show_board(board)
-    board.move([[4, 1], [-1, 1]])
-    players[:white].show_board(board)
-    board.move([[2, 1], [1, 1]])
-    players[:white].show_board(board)
-    board.move([[5, 4], [-1, -1]])
-    debugger
-    board.move([[3, 2], [-1, 1]])
-    players[:white].show_board(board)
-
-    # puts 'TRYING TO MOVE A NON-PIECE MOVE'
-    # board.piece_at([2,1]).move([1, 1])
-    # players[:white].show_board(board)
-
-
-  end
-
   def play_turn
     players[@board.turn].show_board(@board)
-    player_move = players[@board.turn].move # move is a position and a direction
+    player_move = players[@board.turn].move
     @board.move(player_move)
   end
 end
