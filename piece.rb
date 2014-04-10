@@ -19,47 +19,17 @@ class Piece
     "#{color} piece at #{row}, #{col}"
   end
 
-  # needs to be able to tell the board if it can jump
-  def can_jump?
-    directions.any? { |dir| can_jump_in?(dir) }
-  end
-
-  def can_jump_in?(dir)
-    return false unless @board.piece?(next_pos_in(dir))
-    @board.piece_at(next_pos_in(dir)).color != self.color
-  end
-
-  def can_move?
-    directions.any? { |dir| can_move_in?(dir) }
-  end
-
-  def can_move_in?(dir)
-    can_jump_in?(dir) || !@board.piece?(next_pos_in(dir))
-  end
-
-  # make a move in the given direction. Returns true if it jumped, else false
-  def move(dir)
-    if can_jump_in?(dir)
-      jump(dir)
-    elsif !@board.piece?(next_pos_in(dir)) # slide if free
-      slide(dir)
-    else
-      fail "CAN'T MOVE LIKE THAT"
-    end
-  end
-
-  # attempts to jump in the given direction
+  # forces a jump in the given direction, removing a piece it jumps over
   def jump(dir)
-    @board.remove_at(next_pos_in(dir))
-    @row, @col = next_pos_in(dir)
-    @row, @col = next_pos_in(dir)
-    true
+    @board.remove_at(slide_pos(dir))
+    @row, @col = jump_pos(dir)
+    nil
   end
 
-  # attempts to slide in the given direction
+  # forces a slide in the given direction
   def slide(dir)
-    @row, @col = next_pos_in(dir)
-    false
+    @row, @col = slide_pos(dir)
+    nil
   end
 
   def disp_str
@@ -72,9 +42,11 @@ class Piece
     self.color == :white ? UP_DIRS : DOWN_DIRS
   end
 
-  protected
-
-  def next_pos_in(dir)
+  def slide_pos(dir)
     [row + dir[0], col + dir[1]]
+  end
+
+  def jump_pos(dir)
+    [row + 2 * dir[0], col + 2 * dir[1]]
   end
 end
