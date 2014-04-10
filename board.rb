@@ -63,6 +63,8 @@ class Board
     pos, direction = player_move
     moving_piece = piece_at(pos)
 
+    fail 'NOT YOUR PIECE' unless moving_piece.color == @turn
+
     # check if it's valid
     fail 'INVALID MOVE!' unless valid_move?(pos, direction)
 
@@ -86,7 +88,7 @@ class Board
   end
 
   def piece?(pos)
-    false # stubbed
+    piece_at(pos) ? true : false
   end
 
   def piece_at(pos)

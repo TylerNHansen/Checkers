@@ -19,8 +19,15 @@ class Game
   end
 
   def play
-    # play_turn until board.over?
-    test_sequence
+    # test_sequence
+    until board.over?
+      begin
+        play_turn
+      rescue => e
+        puts "That is not a valid move: #{e.message}"
+        retry
+      end
+    end
   end
 
   protected
@@ -30,14 +37,28 @@ class Game
     players[:white].show_board(board)
     board.remove_at([5,2])
     board.remove_at([0,1])
+    board.remove_at([1,4])
+
     puts 'REMOVING A WHITE AND BLACK PIECE'
     players[:white].show_board(board)
-    board.piece_at([5,0]).move([-1, 1])
+
+    puts 'MAKING SOME MOVES, SLIDES AND SINGLE JUMPS'
+    board.move([[5, 0], [-1, 1]])
     players[:white].show_board(board)
-    board.piece_at([4,1]).move([-1, 1])
+    board.move([[4, 1], [-1, 1]])
     players[:white].show_board(board)
-    board.piece_at([2,1]).jump([1, 1])
+    board.move([[2, 1], [1, 1]])
     players[:white].show_board(board)
+    board.move([[5, 4], [-1, -1]])
+    debugger
+    board.move([[3, 2], [-1, 1]])
+    players[:white].show_board(board)
+
+    # puts 'TRYING TO MOVE A NON-PIECE MOVE'
+    # board.piece_at([2,1]).move([1, 1])
+    # players[:white].show_board(board)
+
+
   end
 
   def play_turn

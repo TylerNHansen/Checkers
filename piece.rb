@@ -21,7 +21,12 @@ class Piece
 
   # needs to be able to tell the board if it can jump
   def can_jump?
-    false # stubbed
+    directions.any? { |dir| can_jump_in?(dir) }
+  end
+
+  def can_jump_in?(dir)
+    return false unless @board.piece?(next_pos_in(dir))
+    @board.piece_at(next_pos_in(dir)).color != self.color
   end
 
   def can_move?
@@ -29,24 +34,32 @@ class Piece
   end
 
   def can_move_in?(dir)
-    # returns true if you can move or jump in that direction
+    can_jump_in?(dir) || !@board.piece?(next_pos_in(dir))
   end
 
   # make a move in the given direction. Returns true if it jumped, else false
-  def move(direction)
-    # need the logic for if jump in the direction
-    slide(direction)
+  def move(dir)
+    if can_jump_in?(dir)
+      jump(dir)
+    elsif !@board.piece?(next_pos_in(dir)) # slide if free
+      slide(dir)
+    else
+      fail "CAN'T MOVE LIKE THAT"
+    end
   end
 
   # attempts to jump in the given direction
-  def jump(direction)
-    @board.remove_at([row + direction[0], col + direction[1]])
-    @row, @col = [row + 2 * direction[0], col + 2 * direction[1]]
+  def jump(dir)
+    @board.remove_at(next_pos_in(dir))
+    @row, @col = next_pos_in(dir)
+    @row, @col = next_pos_in(dir)
+    true
   end
 
   # attempts to slide in the given direction
-  def slide(direction)
-    @row, @col = [row + direction[0], col + direction[1]]
+  def slide(dir)
+    @row, @col = next_pos_in(dir)
+    false
   end
 
   def disp_str
@@ -56,6 +69,12 @@ class Piece
   # array of directions the piece can move in
   def directions
     return UP_DIRS + DOWN_DIRS if king
-    color == white ? UP_DIRS : DOWN_DIRS
+    self.color == :white ? UP_DIRS : DOWN_DIRS
+  end
+
+  protected
+
+  def next_pos_in(dir)
+    [row + dir[0], col + dir[1]]
   end
 end
