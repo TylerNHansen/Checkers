@@ -28,7 +28,7 @@ class Player
   def move
     # returns an array [pos, direction]
     # parsing logic from user input to game logic happens here
-    puts "#{name}, please enter where to move what direction (ie, 1,1,7)"
+    puts "#{name}, please enter row, column, and numpad direction (eg 5,0,9)"
     move_arr = gets.chomp.split(',').map(&:to_i)
     [[move_arr[0], move_arr[1]], DIRECTIONS[move_arr[2]]]
   end

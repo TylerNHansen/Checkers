@@ -17,6 +17,11 @@ class Game
     @board = Board.new
     @players = { white: Player.new('WHITE'), black: Player.new }
   end
+  # initialize method for running tests. Comment out the above and uncomment the below to run tests instead.
+  # def initialize
+  #   @board = Board.new
+  #   @players = { white: TestPlayer.new('WHITE'), black: TestPlayer.new }
+  # end
 
   def play
     # test_sequence
