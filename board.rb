@@ -2,12 +2,9 @@
 
 require './piece.rb'
 
-# TASKS
-# Give board state to players
-# move a piece at a location in a direction
-# keep track of whose turn it is
-# keep track of where all the pieces are
-# keep track of which piece, if any, is in the middle of a series of jumps
+# maintains board state separately from who has things to do when
+# implements the rules of checkers, where the Game class
+# manages the players and what they need to do
 class Board
   attr_reader :white_pieces, :black_pieces
   attr_accessor :jumping_piece, :turn, :other_turn
@@ -67,9 +64,6 @@ class Board
     return false if piece_at(piece.slide_pos(dir)).nil?
     return false unless VALID_POS.include?(piece.jump_pos(dir))
 
-    # might need to swap the order of these
-    # self.piece_at( piece.slide_pos(dir) ).color == other_turn &&
-    # self.empty?( piece.jump_pos(dir) )
     return false unless empty?(piece.jump_pos(dir))
     piece_at(piece.slide_pos(dir)).color != piece.color
   end
@@ -84,10 +78,9 @@ class Board
 
   # switches the turn unless the jumping piece can make more jumps
   def toggle_turn
-    if jumping_piece.nil? || !jumps?(jumping_piece)
-      @turn, @other_turn = @other_turn, @turn
-      @jumping_piece = nil
-    end
+    return nil unless jumping_piece.nil? || !jumps?(jumping_piece)
+    @turn, @other_turn = @other_turn, @turn
+    @jumping_piece = nil
   end
 
   def piece?(pos)

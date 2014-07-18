@@ -2,7 +2,7 @@
 
 require './player.rb'
 require './board.rb'
-require 'debugger'
+# require 'debugger'
 
 # High-level game control logic:
 # 1. Get a player1 and player2.
@@ -10,12 +10,12 @@ require 'debugger'
 # 3. Show the board to the current player.
 # 4. Tell the current player to make a move
 # 5. Check if the game is over. If it isn't, do 3 and 4 again.
-# Move format is tentatively chosen as piece location + direction.
+# Move format is piece location + direction.
 class Game
   attr_reader :board, :players
   def initialize
     @board = Board.new
-    @players = { white: TestPlayer.new('WHITE'), black: TestPlayer.new }
+    @players = { white: Player.new('WHITE'), black: Player.new }
   end
 
   def play
@@ -40,4 +40,4 @@ class Game
   end
 end
 
-Game.new.play
+Game.new.play if __FILE__ == $PROGRAM_NAME

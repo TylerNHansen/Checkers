@@ -1,11 +1,7 @@
 # encoding: UTF-8
 
-require 'debugger'
+# require 'debugger'
 
-# needs two methods:
-# 1. Show the player the board
-# 2. Get a move from the player
-# also want to store the name of the player
 class Player
   attr_reader :name
   # BLANK_BOARD = (' ' * 8 + "|\n") * 8
@@ -32,7 +28,6 @@ class Player
   def move
     # returns an array [pos, direction]
     # parsing logic from user input to game logic happens here
-    # under penalty of bugs
     puts "#{name}, please enter where to move what direction (ie, 1,1,7)"
     move_arr = gets.chomp.split(',').map(&:to_i)
     [[move_arr[0], move_arr[1]], DIRECTIONS[move_arr[2]]]
@@ -48,7 +43,7 @@ end
 # Automatically reads a series of moves from testmoves.txt. When out of moves,
 # asks the console for more moves
 class TestPlayer < Player
-  @@moves = File.open('testmoves.txt').each_line.map(&:chomp)
+  @@moves = File.open('testmoves2.txt').each_line.map(&:chomp)
   def move
     if @@moves.empty?
       super
@@ -59,8 +54,4 @@ class TestPlayer < Player
       [[move_arr[0], move_arr[1]], DIRECTIONS[move_arr[2]]]
     end
   end
-end
-
-class NetworkPlayer < Player
-  # doing reading
 end
